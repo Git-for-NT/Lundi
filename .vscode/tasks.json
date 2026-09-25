@@ -1,0 +1,58 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Server",
+      "type": "shell",
+      "command": "npm run dev --prefix server",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^(ERROR.*)$",
+          "message": 1
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*ts-node-dev.*",
+          "endsPattern": "^.*Server listening on.*"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "label": "Server"
+      }
+    },
+    {
+      "label": "Start Client",
+      "type": "shell",
+      "command": "npm run dev --prefix client",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^(ERROR.*)$",
+          "message": 1
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*vite.*",
+          "endsPattern": "^.*Local:.*localhost:5173.*"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "label": "Client"
+      }
+    },
+    {
+      "label": "Start Full Stack",
+      "dependsOn": ["Start Server", "Start Client"],
+      "dependsOrder": "parallel",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

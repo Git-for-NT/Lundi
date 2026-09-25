@@ -1,0 +1,38 @@
+# =============================================================================
+# .gitignore — Root-level ignore rules for the Lundi AI Chatbot monorepo
+#
+# Purpose: Prevent sensitive, generated, and environment-specific files from
+#          being committed to source control.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Environment variable files
+# CRITICAL: .env files contain secrets such as the OPENAI_API_KEY. Committing
+# secrets to a repository — even a private one — is a serious security risk.
+# Anyone with read access to the repo (including future collaborators or a
+# leaked token) could abuse those credentials. Always use .env.example to
+# document which variables are required, and keep actual values out of git.
+# -----------------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+
+# -----------------------------------------------------------------------------
+# Node.js dependencies
+# node_modules/ directories are large, OS-specific, and fully reproducible by
+# running `npm install`. Committing them bloats the repository and causes
+# unnecessary merge conflicts. Consumers install their own copies from
+# package.json / package-lock.json.
+# -----------------------------------------------------------------------------
+node_modules/
+
+# -----------------------------------------------------------------------------
+# Compiled output — TypeScript / Vite build artifacts
+# dist/ and build/ contain the compiled JavaScript output produced by `tsc` or
+# the Vite bundler. These files are derived artifacts: they can always be
+# regenerated from source and should never be manually edited. Excluding them
+# keeps the repository focused on source code and avoids committing files that
+# differ across machines or build environments.
+# -----------------------------------------------------------------------------
+dist/
+build/

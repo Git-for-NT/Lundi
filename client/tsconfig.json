@@ -1,0 +1,81 @@
+{
+  // TypeScript compiler configuration for the React + Vite client.
+  // This file is used for type-checking only — Vite's esbuild handles the actual
+  // transpilation at build time (see 'noEmit' below). The tsconfig.node.json file
+  // alongside this one covers the vite.config.ts file, which runs in Node.js rather
+  // than the browser. Both files are referenced here so a single 'tsc --build' call
+  // covers the entire client package.
+  // See: https://www.typescriptlang.org/tsconfig
+  "compilerOptions": {
+    // Compile to ES2020 JavaScript. All modern browsers supported by Vite's default
+    // target ship full ES2020 support (optional chaining, nullish coalescing, Promise
+    // combinators, etc.), so no down-levelling polyfills are needed.
+    "target": "ES2020",
+
+    // Aligns class field semantics with the ECMAScript standard (define semantics).
+    // Required when targeting ES2022 or higher AND when using Vite with React 18,
+    // because Vite's esbuild transform assumes define semantics. Without this flag,
+    // class fields initialised in constructors may behave inconsistently.
+    "useDefineForClassFields": true,
+
+    // Include built-in type definitions for the ES2020 standard library plus the
+    // browser DOM APIs. 'DOM' provides types for document, window, HTMLElement, fetch,
+    // crypto, sessionStorage, etc. 'DOM.Iterable' adds iterable overloads for DOM
+    // collections (NodeList, HTMLCollection) so you can use for...of on them.
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    // Allow importing .ts and .tsx files using their full extensions
+    // (e.g., import { foo } from './utils.ts'). Vite resolves these correctly at
+    // build time; without this flag TypeScript would reject the extension in the import.
+    "allowImportingTsExtensions": true,
+
+    // Use 'bundler' module resolution, which mirrors how Vite resolves modules:
+    // supports 'exports' fields in package.json, allows extension-less imports, and
+    // works correctly with 'allowImportingTsExtensions'. This is the recommended
+    // setting for Vite projects. Common mistake: using 'node' or 'classic', which
+    // reject some package.json 'exports' conditions that Vite relies on.
+    "moduleResolution": "bundler",
+
+    // Allow importing .json files directly as typed ES modules
+    // (e.g., import data from './data.json'). TypeScript infers the type from the
+    // JSON structure automatically. Useful for importing static config or fixtures.
+    // Note: requires a non-classic moduleResolution (e.g., 'bundler') to be set.
+    "resolveJsonModule": true,
+
+    // Require each file to be a self-contained, independently compilable module.
+    // This is mandatory for Vite's esbuild transform, which processes one file at a
+    // time without a full program-wide type pass. Common mistake: using 'const enum'
+    // — it requires cross-file knowledge and is incompatible with isolatedModules.
+    "isolatedModules": true,
+
+    // Do NOT emit any JavaScript output files. TypeScript is used purely for
+    // type-checking here; Vite's esbuild handles the actual transpilation and
+    // bundling. Emitting .js alongside Vite's output would create confusing
+    // duplicates and is never what you want in a Vite project.
+    "noEmit": true,
+
+    // Use the new JSX transform introduced in React 17+. This transform does NOT
+    // require 'import React from "react"' at the top of every .tsx file — the
+    // runtime import is injected automatically by the transform. Common mistake:
+    // using 'react' (the classic transform) with React 18, which still works but
+    // requires the manual import and produces slightly larger bundles.
+    "jsx": "react-jsx",
+
+    // Enable the full suite of strict type checks: strictNullChecks, noImplicitAny,
+    // strictFunctionTypes, strictBindCallApply, strictPropertyInitialization, and
+    // more. Catching type errors at compile time is far cheaper than debugging them
+    // at runtime. Disable individual checks only when there is a clear, documented
+    // reason to do so.
+    "strict": true
+  },
+
+  // Only compile TypeScript source files inside the 'src/' directory.
+  // This excludes the vite.config.ts file (which is covered by tsconfig.node.json),
+  // test helpers, scripts, or any other files at the package root.
+  "include": ["src"],
+
+  // Reference the Node.js tsconfig so that 'tsc --build' type-checks vite.config.ts
+  // as well. This creates a project reference — a lightweight link that tells
+  // TypeScript these two tsconfig files together cover the whole client package.
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

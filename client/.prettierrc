@@ -1,0 +1,9 @@
+{
+  "//": "Prettier configuration for the client package. Prettier is an opinionated code formatter that enforces a consistent style by reprinting source code from scratch — it removes all original styling and outputs uniformly formatted code. Unlike ESLint (which catches logic errors), Prettier focuses purely on whitespace, quotes, and punctuation. Having both tools together gives you correctness (ESLint) AND consistency (Prettier). These options intentionally mirror the server package's Prettier config so that switching between client/ and server/ source files feels uniform. Option rationale: singleQuote keeps code idiomatic and reduces visual noise from escaped quotes inside strings; semi makes statement boundaries unambiguous and avoids edge-case ASI bugs; printWidth:100 is a comfortable line length for modern widescreen monitors without forcing excessive line-wrapping; tabWidth:2 is the community standard and keeps indentation compact; trailingComma:'all' produces cleaner git diffs when adding new items to multi-line arrays or objects because only the new line changes, not the preceding line.",
+
+  "singleQuote": true,
+  "semi": true,
+  "printWidth": 100,
+  "tabWidth": 2,
+  "trailingComma": "all"
+}

@@ -1,0 +1,103 @@
+<!--
+  index.html — Vite HTML entry point
+  ====================================
+  Purpose:
+    This is the single HTML page served by Vite's dev server (and included in the
+    production build). The browser loads this file first; everything else — React,
+    TypeScript, components, styles — is injected at runtime via the <script> tag below.
+
+  Architecture:
+    In a Vite + React project there is only one HTML file. The React application mounts
+    itself into <div id="root"> and takes over the entire page from that point on.
+    Vite uses this file as the "entry point" for both the dev server and the production
+    bundler (vite build).
+
+  Request flow (development):
+    1. Browser navigates to http://localhost:5173
+    2. Vite dev server serves this file
+    3. Browser parses the HTML and encounters the <script type="module"> tag
+    4. Vite intercepts the request for /src/main.tsx, transforms it on-the-fly
+       (TypeScript → JavaScript, JSX → JS), and returns it to the browser
+    5. main.tsx calls ReactDOM.createRoot(...).render(<App />) which mounts the
+       entire component tree into <div id="root">
+
+  Request flow (production):
+    1. `vite build` bundles and minifies all source files into client/dist/
+    2. It rewrites this file, replacing /src/main.tsx with the fingerprinted bundle
+       path (e.g., /assets/index-Bx3kQz1A.js)
+    3. The dist/ folder is served as static files by any web server or CDN
+-->
+
+<!--
+  <!doctype html>
+  Why: The DOCTYPE declaration tells the browser to render the page in "standards mode"
+  rather than "quirks mode". Without it, browsers simulate old, buggy behaviour from
+  the 1990s to support legacy pages — CSS box-model, layout, and many other features
+  behave differently. Always include it as the very first line of every HTML document.
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <!--
+      charset="UTF-8"
+      Ensures the browser interprets the file as UTF-8, supporting international
+      characters in any text the AI assistant returns (e.g., Chinese, Arabic, emoji).
+    -->
+    <meta charset="UTF-8" />
+
+    <!--
+      viewport meta tag
+      Makes the page responsive on mobile devices. Without this, mobile browsers
+      render the page at desktop width (typically 980px) and scale it down, making
+      text tiny. `width=device-width` sets the viewport to the device's screen width;
+      `initial-scale=1.0` prevents any initial zoom.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Lundi — AI Chatbot</title>
+  </head>
+  <body>
+    <!--
+      <div id="root">
+      Why it is empty: React's ReactDOM.createRoot(document.getElementById('root'))
+      mounts the entire component tree into this element at runtime. The div starts
+      empty because there is no server-side rendering in this project — the browser
+      downloads the JavaScript bundle, executes it, and React populates the DOM
+      from scratch. If you open this file directly in a browser (without Vite serving
+      it), you will see a blank page because the script has not yet run.
+
+      Common mistake to avoid: Do not put static content inside this div. React
+      treats it as its own managed subtree and will overwrite anything placed here
+      during the initial render.
+    -->
+    <div id="root"></div>
+
+    <!--
+      <script type="module" src="/src/main.tsx">
+
+      Why type="module":
+        Required for Vite's dev server to work correctly. `type="module"` tells the
+        browser to treat the script as an ES module, which enables:
+          - Native browser ES module (ESM) imports — `import` / `export` syntax
+          - Vite's Hot Module Replacement (HMR): when you edit a source file, only
+            the changed module is re-fetched and swapped in without a full page reload
+          - Deferred execution by default: module scripts run after the HTML is parsed,
+            so `document.getElementById('root')` is guaranteed to exist when main.tsx runs
+
+      Why src="/src/main.tsx":
+        In development, Vite intercepts every request for /src/* files and transforms
+        them on-the-fly: TypeScript is stripped, JSX is compiled to React.createElement
+        calls, and the result is returned as plain JavaScript — all in milliseconds,
+        with no separate compile step.
+
+        In production (`vite build`), Vite replaces this path automatically with the
+        fingerprinted bundle it writes to dist/assets/ (e.g., /assets/index-Ab3kQz1A.js).
+        You never need to update this file for production — Vite handles the rewrite.
+
+      Common mistake to avoid: Do not add `defer` or `async` attributes to a
+      type="module" script — module scripts are already deferred by the spec.
+      Adding them is redundant and can confuse readers.
+    -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

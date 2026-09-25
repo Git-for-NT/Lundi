@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Full Stack (Client + Server)",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/client/src",
+            "preLaunchTask": "Start Full Stack"
+        }
+    ]
+}

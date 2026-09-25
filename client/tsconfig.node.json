@@ -1,0 +1,43 @@
+{
+  // TypeScript compiler configuration for the Vite configuration file (vite.config.ts).
+  // This is a separate tsconfig because vite.config.ts runs in Node.js, not the browser:
+  // it uses Node.js module resolution, has no DOM types, and is compiled independently
+  // from the React source tree. The main tsconfig.json references this file via
+  // 'references' so that 'tsc --build' covers both environments in one pass.
+  // See: https://www.typescriptlang.org/tsconfig#composite
+  "compilerOptions": {
+    // Enable TypeScript project references. 'composite: true' means this tsconfig
+    // can be referenced by another tsconfig (i.e., the root tsconfig.json). It also
+    // forces 'declaration: true' and 'declarationMap: true' implicitly so the parent
+    // project can consume the type information without recompiling this sub-project.
+    "composite": true,
+
+    // Skip type-checking of .d.ts files in node_modules. Speeds up builds and avoids
+    // noise from type declaration inconsistencies in third-party packages (e.g., Vite
+    // plugin types) that are not under our control.
+    "skipLibCheck": true,
+
+    // Emit ESNext module syntax (import/export). Vite's config file is processed by
+    // Vite itself at startup, which understands native ES module syntax. Using ESNext
+    // here keeps the config file in its natural form without unnecessary down-levelling.
+    "module": "ESNext",
+
+    // Use 'bundler' resolution, which mirrors how Vite and modern bundlers resolve
+    // modules: it supports 'exports' fields in package.json, allows extension-less
+    // imports, and does not require the full Node.js resolution algorithm. This is the
+    // recommended setting when your code is consumed by a bundler rather than Node.js
+    // directly. Common mistake: using 'node' resolution here, which rejects some
+    // package.json 'exports' conditions that Vite relies on.
+    "moduleResolution": "bundler",
+
+    // Allow 'import foo from "bar"' syntax for CommonJS modules that do not have a
+    // proper ES default export. Some Vite plugins and config helpers are still
+    // distributed as CommonJS, so this flag prevents TypeScript from raising an
+    // error when you import them with default-import syntax.
+    "allowSyntheticDefaultImports": true
+  },
+
+  // Only compile vite.config.ts. No other files belong to the Node.js environment
+  // tsconfig — all React source files are covered by the root tsconfig.json.
+  "include": ["vite.config.ts"]
+}

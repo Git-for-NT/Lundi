@@ -1,0 +1,85 @@
+/*
+ * index.css — Global reset and base styles
+ *
+ * Styling philosophy:
+ *   This is a learning project, so the goal is clarity over polish. We use a
+ *   minimal reset only — no CSS framework, no utility-class library (Tailwind,
+ *   Bootstrap, etc.). Individual components carry their own inline styles so
+ *   every style decision is visible right next to the markup it affects. That
+ *   makes it easy to read a component file and understand exactly how it looks
+ *   without hunting through a stylesheet. The only styles that belong here are
+ *   truly global concerns: the box-model reset, the body defaults, and the root
+ *   container layout that the entire app is built on top of.
+ */
+
+/* ─── Box-sizing reset ───────────────────────────────────────────────────────
+ *
+ * Why this matters:
+ *   The browser default is `content-box`, which means that `padding` and
+ *   `border` are added *on top of* an element's stated width. So a
+ *   `width: 100px` element with `padding: 10px` actually renders at 120px —
+ *   surprising layout math that causes hard-to-debug overflow issues.
+ *
+ *   `border-box` flips the model: padding and border are *included* in the
+ *   stated width. A `width: 100px` element with `padding: 10px` stays 100px
+ *   wide; the content area shrinks to 80px instead. This is almost always what
+ *   you want, and it is what virtually every CSS framework defaults to.
+ *
+ *   Applying it to `*`, `*::before`, and `*::after` catches pseudo-elements
+ *   too, which also default to `content-box`.
+ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ─── Body reset ─────────────────────────────────────────────────────────────
+ *
+ * Removes the browser's default 8px body margin and padding so our chat layout
+ * can sit flush against the viewport edges.
+ *
+ * Font stack — system fonts, no web font download required:
+ *   `-apple-system` → San Francisco on macOS/iOS
+ *   `BlinkMacSystemFont` → San Francisco on Chrome/macOS
+ *   `'Segoe UI'` → Segoe UI on Windows
+ *   `Roboto` → Roboto on Android/Chrome OS
+ *   `Oxygen` → Oxygen on KDE Linux
+ *   `Ubuntu` → Ubuntu on Ubuntu Linux
+ *   `sans-serif` → final fallback to the OS default sans-serif
+ *
+ *   Using the system font stack means the app looks native on every OS without
+ *   loading an external font file — no flash of unstyled text, no extra network
+ *   request, and text rendering matches what the user expects on their device.
+ */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* ─── Root container ─────────────────────────────────────────────────────────
+ *
+ * `height: 100vh`
+ *   Makes the #root div fill the full viewport height. This is a prerequisite
+ *   for the chat layout: ChatWindow uses `flex: 1` to expand and fill all
+ *   remaining vertical space between the header and the message input. That
+ *   flex-grow trick only works when the parent has a *constrained* height — if
+ *   the parent were allowed to grow freely (the default block behaviour), there
+ *   would be no remaining space to distribute and `flex: 1` would have no
+ *   effect. `100vh` pins the root to exactly the viewport height, giving the
+ *   flex children a fixed budget to divide up.
+ *
+ * `display: flex; flex-direction: column`
+ *   Establishes the vertical flex container that the app's three main regions
+ *   (header, message list, input bar) are laid out inside. ChatWindow receives
+ *   `flex: 1`, which tells it to take all the space that the header and input
+ *   bar do not claim. Without this flex context on #root, `flex: 1` on
+ *   ChatWindow would be silently ignored and the message list would collapse
+ *   to its natural content height instead of filling the screen.
+ */
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

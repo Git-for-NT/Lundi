@@ -1,0 +1,11 @@
+{
+  "description": "Root package.json for the AI Chatbot monorepo. This file exists solely to coordinate the two sub-packages: 'client/' (React + Vite frontend, port 5173) and 'server/' (Express + Node.js backend, port 3001). It does not contain application source code. The 'dev' script uses 'concurrently' to start both packages in parallel with a single command. The 'install:all' script installs dependencies for both packages in sequence. Neither 'client/' nor 'server/' inherits dependencies from this root — each manages its own node_modules.",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "install:all": "npm install --prefix server && npm install --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

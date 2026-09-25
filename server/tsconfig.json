@@ -1,0 +1,66 @@
+{
+  // TypeScript compiler configuration for the Express/Node.js server.
+  // This file controls how tsc transforms TypeScript source (src/) into
+  // JavaScript output (dist/). Every option below is explained inline.
+  // See: https://www.typescriptlang.org/tsconfig
+  "compilerOptions": {
+    // Compile to ES2020 JavaScript. Node 18+ supports all ES2020 features natively
+    // (optional chaining, nullish coalescing, BigInt, Promise.allSettled, etc.),
+    // so no down-levelling polyfills are needed.
+    "target": "ES2020",
+
+    // Emit CommonJS modules (require/module.exports). Node.js uses CommonJS by
+    // default; this avoids the ESM interop complexity that comes with
+    // 'module: NodeNext' or 'module: ESNext'.
+    "module": "commonjs",
+
+    // Include built-in type definitions for the ES2020 standard library
+    // (e.g., Promise, Map, Set, Array methods). Matches the 'target' value
+    // so the types and the output are always in sync.
+    "lib": ["ES2020"],
+
+    // Enable the full suite of strict type checks: strictNullChecks, noImplicitAny,
+    // strictFunctionTypes, strictPropertyInitialization, and more. Catches many bugs
+    // at compile time that would otherwise surface at runtime.
+    "strict": true,
+
+    // Allow 'import express from "express"' (default-import syntax) for CommonJS
+    // modules that don't have a proper ES default export. Without this flag you'd
+    // have to write 'import * as express from "express"'.
+    "esModuleInterop": true,
+
+    // Skip type-checking of .d.ts files in node_modules. Speeds up builds
+    // significantly and avoids noise from type declaration inconsistencies in
+    // third-party packages that are not under our control.
+    "skipLibCheck": true,
+
+    // Write compiled .js (and .d.ts / .map) files to the 'dist/' directory,
+    // mirroring the 'src/' structure. The 'dist/' directory is excluded from
+    // git via .gitignore.
+    "outDir": "dist",
+
+    // Treat 'src/' as the root of all TypeScript source files. tsc will replicate
+    // this directory structure under 'outDir'. Setting this explicitly prevents
+    // accidental inclusion of files outside 'src/'.
+    "rootDir": "src",
+
+    // Allow importing .json files directly (e.g., 'import pkg from "../package.json"').
+    // Useful for reading the package version or other static config without a
+    // separate loader.
+    "resolveJsonModule": true,
+
+    // Emit a .d.ts type declaration file alongside each compiled .js file. Useful
+    // if another package or tool ever consumes this server package as a library,
+    // and generally considered good practice.
+    "declaration": true,
+
+    // Generate .map source-map files that map compiled JavaScript back to the
+    // original TypeScript source. Enables debuggers (VS Code, Node inspector) and
+    // stack traces to reference the correct TypeScript line numbers.
+    "sourceMap": true
+  },
+
+  // Only compile files inside the 'src/' directory. Excludes test helpers, scripts,
+  // or configuration files that may live at the package root.
+  "include": ["src"]
+}
